@@ -4,12 +4,33 @@ import logo2 from "./assets/logoBlanco.svg";
 import graphic from "./assets/Vector.png";
 import "./App.css";
 
+interface FormData {
+  nombre: string;
+  telefono: string;
+  instagram: string;
+  correo: string;
+  fechaNacimiento: string;
+  codigoPostal: string;
+  medioAtencion: string;
+  curso: string;
+  fechaInicio: string;
+  apartoCon: string;
+  costoTotal: string;
+  comoTeEnteraste: string;
+  motivo: string;
+  otrosCursos: string;
+  contactoEmergencia: string;
+  mayorEdad: string;
+  tutor: string;
+  aceptoTerminos: boolean;
+}
+
 function App() {
   // --- ESTADO DEL FORMULARIO MULTI-PASO ---
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     nombre: "",
     telefono: "",
     instagram: "",
@@ -30,8 +51,7 @@ function App() {
     aceptoTerminos: false,
   });
 
-  // Precios ficticios (Cámbialos por los reales)
-  const preciosCursos = {
+  const preciosCursos: Record<string, number> = {
     Maquillaje: 3500,
     Uñas: 3000,
     Pestañas: 2500,
@@ -44,27 +64,32 @@ function App() {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    // Autocompletar precio si se cambia el curso
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value, type } = e.target;
+
+    // Aquí hacemos el casteo para que TypeScript sepa que si es checkbox, tiene .checked
+    const val =
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+
     if (name === "curso") {
-      setFormData({
-        ...formData,
+      setFormData((prev) => ({
+        ...prev,
         curso: value,
-        costoTotal: preciosCursos[value] || "",
-      });
+        costoTotal: preciosCursos[value] ? String(preciosCursos[value]) : "",
+      }));
     } else {
-      setFormData({
-        ...formData,
-        [name]: type === "checkbox" ? checked : value,
-      });
+      setFormData((prev) => ({
+        ...prev,
+        [name]: val,
+      }));
     }
   };
 
-  const handleSubmitFinal = (e) => {
+  const handleSubmitFinal = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Datos listos para enviar:", formData);
-    setIsSubmitted(true); // Muestra el mensaje de éxito
+    setIsSubmitted(true);
   };
 
   return (
