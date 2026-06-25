@@ -23,6 +23,7 @@ interface FormData {
   mayorEdad: string;
   tutor: string;
   aceptoTerminos: boolean;
+  modulo: string;
 }
 
 function App() {
@@ -49,16 +50,18 @@ function App() {
     mayorEdad: "",
     tutor: "",
     aceptoTerminos: false,
+    modulo: "",
   });
 
-  const preciosCursos: Record<string, number> = {
-    Maquillaje: 3500,
-    Uñas: 3000,
-    Pestañas: 2500,
-    Peinado: 2000,
-    CejasLashLift: 2800,
-    Automaquillaje: 1500,
-    LashLiftCoreano: 3200,
+  type CursoConfig = { precio: number; maxModulos: number };
+  const cursosConfig: Record<string, CursoConfig> = {
+    Maquillaje: { precio: 3500, maxModulos: 3 },
+    Uñas: { precio: 3000, maxModulos: 2 },
+    Pestañas: { precio: 2500, maxModulos: 2 },
+    Peinado: { precio: 2000, maxModulos: 2 },
+    CejasLashLift: { precio: 2800, maxModulos: 1 },
+    Automaquillaje: { precio: 1500, maxModulos: 1 },
+    LashLiftCoreano: { precio: 3200, maxModulos: 1 },
   };
 
   const nextStep = () => setStep((prev) => prev + 1);
@@ -77,7 +80,10 @@ function App() {
       setFormData((prev) => ({
         ...prev,
         curso: value,
-        costoTotal: preciosCursos[value] ? String(preciosCursos[value]) : "",
+        modulo: "",
+        costoTotal: cursosConfig[value]
+          ? String(cursosConfig[value].precio)
+          : "",
       }));
     } else {
       setFormData((prev) => ({
@@ -89,6 +95,7 @@ function App() {
 
   const handleSubmitFinal = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Datos enviados:", formData);
     setIsSubmitted(true);
   };
 
@@ -327,6 +334,29 @@ function App() {
                         </option>
                       </select>
                     </div>
+                    {formData.curso &&
+                      cursosConfig[formData.curso]?.maxModulos > 1 && (
+                        <div className="form-group">
+                          <label className="field-label">
+                            Selecciona el Módulo
+                          </label>
+                          <select
+                            name="modulo"
+                            value={formData.modulo}
+                            onChange={handleChange}
+                            required
+                          >
+                            <option value="">Selecciona un módulo</option>
+                            {Array.from({
+                              length: cursosConfig[formData.curso].maxModulos,
+                            }).map((_, i) => (
+                              <option key={i + 1} value={`Módulo ${i + 1}`}>
+                                Módulo {i + 1}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
                     <div className="form-group">
                       <label className="field-label">
                         Fecha de Inicio de Curso
