@@ -1,0 +1,404 @@
+/*Formato Global*/
+:root {
+  --naranja-primario: #FFA500;
+  --fondo-oscuro: #111827;
+  --texto-gris: #4b5563;
+  --fondo-claro: #f9fafb;
+  --fondo-grisclaro: #f3f4f6;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+html,#root {
+  min-height: 100vh;
+  background-color: var(--fondo-claro); 
+}
+body{
+  height: 100%;
+}
+.centered-element {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.maxwidth{
+  width: 1040px;
+}
+button{
+  background-color: var(--naranja-primario);
+  color: white;
+  font-weight: bolder;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 10rem;
+}
+button:hover{
+  background-color: #ad7100;
+}
+/*Formato Global*/
+
+/*Imagenes*/
+.Logo {
+  width: 19rem;
+  height: auto;
+}
+/*Imagenes*/
+
+/*Heroe*/
+.Heroe-Wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+/*Header*/
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 0;
+}
+/*Header*/
+
+/* Contenedor que envuelve header + hero y toma todo el viewport */
+.Heroe {
+  width: 100%;
+  flex: 1 0 auto; /* rellena el espacio restante dentro de .Heroe-Wrapper */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--fondo-grisclaro);
+}
+/* Contenedor interior del hero (ya aplicado .maxwidth en JSX) */
+.HeaderBody-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 0;
+  gap: 2.5rem; /* espacio entre columnas en desktop */
+}
+
+/* Texto del hero */
+.Heroe-Text{
+  display: flex;
+  flex-direction: column;
+  gap: 3.25rem;
+  padding: 0 5rem 0 0;
+  max-width: 56%; /* reserva espacio para la gráfica */
+}
+/* Gráfica del hero (desktop) */
+.Heroe-Graphic {
+  width: 42%;
+  height: auto;
+  object-fit: contain;
+}
+/*Textos del heroe*/
+h1{
+  font-size: 64px;
+  font-weight: bolder;
+  color: black;
+}
+/*Textos del heroe*/
+/*Heroe*/
+
+/*Main*/
+.material-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 2rem; 
+  padding: 4rem 0; 
+}
+
+.material-section h2 {
+  grid-column: 1 / -1; 
+  text-align: center;
+  margin-bottom: 2rem; 
+}
+
+.material-section div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+.SVG {
+  width: 3.5rem;
+  height: auto;
+  fill: var(--naranja-primario);
+}
+.titulo {
+  text-align: center;
+}
+.card {
+  background-color: var(--fondo-grisclaro);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #d1d5db;
+}
+/*Main*/
+
+/* Formularios */
+.Form-section {
+  padding: 4rem 1rem;
+  display: flex;
+  justify-content: center;
+  background-color: var(--fondo-grisclaro);
+  width: 100%;
+}
+
+.form-container {
+  position: relative;
+  overflow: hidden;
+  background-color: white;
+  border-radius: 1rem;
+  padding: 2.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Barra de progreso superior */
+.progress-bar-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background-color: #f3f4f6;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--naranja-primario);
+  transition: width 0.4s ease-in-out;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-size: 2rem;
+  margin-top: 0.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.form-group label.field-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--texto-gris);
+  font-size: 0.95rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group select {
+  padding: 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background-color: var(--fondo-claro);
+  color: #1f2937;
+  width: 100%;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--naranja-primario);
+  box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: normal;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.radio-label input[type="radio"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--naranja-primario);
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2.5rem;
+}
+.button-group.right {
+  justify-content: flex-end;
+}
+.btn-outline {
+  background-color: transparent;
+  color: var(--naranja-primario);
+  border: 2px solid var(--naranja-primario);
+}
+.btn-outline:hover {
+  background-color: var(--naranja-primario);
+  color: white;
+}
+
+.policy-box {
+  background-color: #fdf2f8;
+  border: 1px solid #fbcfe8;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.policy-box h4 {
+  color: #be123c;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.policy-box ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.policy-box ul li { color: #1f2937; line-height: 1.4; }
+.policy-box ul li strong { color: #be123c; }
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: #4b5563;
+  cursor: pointer;
+  background-color: var(--fondo-claro);
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  line-height: 1.4;
+}
+.checkbox-label input[type="checkbox"] {
+  margin-top: 0.15rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--naranja-primario);
+}
+
+.success-message {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 0.5rem;
+  margin-top: 2rem;
+}
+.success-message h3 {
+  color: #15803d;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.success-message p {
+  color: #166534;
+}
+
+
+
+/* Footer Profesional */
+footer {
+  background-color: var(--fondo-oscuro);
+  color: white;
+  padding: 3rem 1rem;
+}
+
+.footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Esto permite que los elementos se muevan a una nueva fila en móviles */
+  gap: 2rem;
+}
+
+.footer .Logo {
+  width: 140px; /* Tamaño controlado del logo */
+  height: auto;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-column h4 {
+  margin: 0;
+  color: var(--naranja-primario);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer-column a {
+  color: #d1d5db;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.footer-column a:hover {
+  color: white;
+}
+
+/* Contenedor de iconos */
+.social-icons {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.SvgB {
+  width: 28px;
+  height: 28px;
+  fill: white;
+  transition: all 0.3s ease;
+}
+
+.SvgB:hover {
+  fill: var(--naranja-primario);
+  transform: translateY(-3px) scale(1.1);
+}
+
+.copyright {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #374151;
+  font-size: 0.8rem;
+  color: #6b7280;
+  width: 100%;
+}
