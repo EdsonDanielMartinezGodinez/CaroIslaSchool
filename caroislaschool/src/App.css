@@ -2,7 +2,7 @@
 :root {
   --naranja-primario: #FFA500;
   --fondo-oscuro: #111827;
-  --texto-gris: #4b5563;
+  --texto-gris: #555555;
   --fondo-claro: #f9fafb;
   --fondo-grisclaro: #f3f4f6;
 }
@@ -25,18 +25,23 @@ body{
   align-items: center;
 }
 .maxwidth{
-  width: 1040px;
+  width: 90%;
+  max-width: 1200px;
+  padding: 0 20px;
+  margin: 0 20px;
 }
 button{
   background-color: var(--naranja-primario);
   color: white;
   font-weight: bolder;
+  font-size: large;
   border: none;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
   width: 10rem;
+  height: 2.5rem;
 }
 button:hover{
   background-color: #ad7100;
@@ -64,6 +69,15 @@ button:hover{
   align-items: center;
   padding: 2rem 0;
 }
+.highlight{
+  color: var(--naranja-primario);
+
+}
+.Heroe-Description{
+  font-size: 1.25rem;
+  color: var(--texto-gris);
+  line-height: 1.6;
+}
 /*Header*/
 
 /* Contenedor que envuelve header + hero y toma todo el viewport */
@@ -89,14 +103,25 @@ button:hover{
   display: flex;
   flex-direction: column;
   gap: 3.25rem;
-  padding: 0 5rem 0 0;
+
   max-width: 56%; /* reserva espacio para la gráfica */
+  flex-grow: 1;
 }
 /* Gráfica del hero (desktop) */
 .Heroe-Graphic {
-  width: 42%;
   height: auto;
   object-fit: contain;
+
+  /* Agrega o reemplaza estas para control absoluto */
+  width: 100%;           /* Ocupa el espacio disponible */
+  max-width: 400px;      /* Que no se vuelva gigante en escritorio */
+  display: block;        /* Elimina espacios extra debajo de la imagen */
+
+}
+.Heroe-Text button{
+  width: 12rem;
+  height: 3rem;
+  font-size: large;
 }
 /*Textos del heroe*/
 h1{
@@ -401,4 +426,54 @@ footer {
   font-size: 0.8rem;
   color: #6b7280;
   width: 100%;
+}
+
+
+/*MEdia queris*/
+/* El Heroe: Cambia de lado a columna en móviles */
+@media (max-width: 700px) {
+  .header-section {
+    padding: 1rem 0; /* Menos espacio arriba y abajo */
+    gap: 10px;       /* Menos espacio entre logo y botón */
+  }
+
+  .Logo {
+    width: 120px;    /* El logo se reduce significativamente en móvil */
+  }
+
+  /* Si el botón de contacto se ve raro, lo ajustamos */
+  .header-section button {
+    width: auto;     /* Que no sea tan largo */
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  .HeaderBody-section {
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    gap: 30px;
+  }
+  .Heroe-Graphic{
+    display: none;
+  }
+  .Heroe-Text{
+    padding: 0; /* Centramos el texto totalmente */
+    max-width: 100%;
+    padding: 10px 0;
+  }
+
+  .material-section {
+    grid-template-columns: 1fr; /* Tarjetas de beneficios una debajo de otra */
+    width: 100%;
+  }
+
+  .card{
+    width: 80%;
+    justify-self: center;
+  }
+  .Heroe-Text button {
+    margin: 0 auto;      /* Centrado extra por si acaso */
+    width: auto;         /* Que se adapte a su contenido o usa 100% si prefieres */
+    display: block;      /* Importante para el centrado con márgenes */
+  }
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import logo from "./assets/image 22.svg";
 import logo2 from "./assets/logoBlanco.svg";
 import graphic from "./assets/Vector.png";
+import { motion } from "framer-motion";
 import "./App.css";
 
 interface FormData {
@@ -53,15 +54,38 @@ function App() {
     modulo: "",
   });
 
-  type CursoConfig = { precio: number; maxModulos: number };
+  type ModuloConfig = { nombre: string; precio: number };
+  type CursoConfig = { precioUnico?: number; modulos?: ModuloConfig[] };
+
   const cursosConfig: Record<string, CursoConfig> = {
-    Maquillaje: { precio: 3500, maxModulos: 3 },
-    Uñas: { precio: 3000, maxModulos: 2 },
-    Pestañas: { precio: 2500, maxModulos: 2 },
-    Peinado: { precio: 2000, maxModulos: 2 },
-    CejasLashLift: { precio: 2800, maxModulos: 1 },
-    Automaquillaje: { precio: 1500, maxModulos: 1 },
-    LashLiftCoreano: { precio: 3200, maxModulos: 1 },
+    Maquillaje: {
+      modulos: [
+        { nombre: "Módulo 1: Teoría", precio: 1200 },
+        { nombre: "Módulo 2: Práctica", precio: 1300 },
+        { nombre: "Módulo 3: Avanzado", precio: 1000 },
+      ],
+    },
+    Uñas: {
+      modulos: [
+        { nombre: "Módulo 1: Básico", precio: 1500 },
+        { nombre: "Módulo 2: Estructura", precio: 1500 },
+      ],
+    },
+    Pestañas: {
+      modulos: [
+        { nombre: "Módulo 1", precio: 1250 },
+        { nombre: "Módulo 2", precio: 1250 },
+      ],
+    },
+    Peinado: {
+      modulos: [
+        { nombre: "Módulo 1", precio: 1000 },
+        { nombre: "Módulo 2", precio: 1000 },
+      ],
+    },
+    CejasLashLift: { precioUnico: 2800 },
+    Automaquillaje: { precioUnico: 1500 },
+    LashLiftCoreano: { precioUnico: 3200 },
   };
 
   const nextStep = () => setStep((prev) => prev + 1);
@@ -71,25 +95,32 @@ function App() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value, type } = e.target;
-
-    // Aquí hacemos el casteo para que TypeScript sepa que si es checkbox, tiene .checked
     const val =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
 
     if (name === "curso") {
+      const config = cursosConfig[value];
       setFormData((prev) => ({
         ...prev,
         curso: value,
-        modulo: "",
-        costoTotal: cursosConfig[value]
-          ? String(cursosConfig[value].precio)
-          : "",
+        modulo: "", // Limpiamos módulo al cambiar de curso
+        costoTotal: config?.precioUnico ? String(config.precioUnico) : "",
       }));
-    } else {
+    } else if (name === "modulo") {
+      const cursoSeleccionado = cursosConfig[formData.curso];
+      const moduloEncontrado = cursoSeleccionado?.modulos?.find(
+        (m) => m.nombre === value,
+      );
+
       setFormData((prev) => ({
         ...prev,
-        [name]: val,
+        modulo: value,
+        costoTotal: moduloEncontrado
+          ? String(moduloEncontrado.precio)
+          : prev.costoTotal,
       }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: val }));
     }
   };
 
@@ -99,15 +130,32 @@ function App() {
     setIsSubmitted(true);
   };
 
+  const formVariants = {
+    hidden: { opacity: 0, x: 40 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+    exit: { opacity: 0, x: -40, transition: { duration: 0.2 } },
+  };
+
   return (
     <>
       <div className="Heroe-Wrapper">
-        <header className="centered-element">
+        <motion.header
+          className="centered-element"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <section className="header-section maxwidth">
             <img className="Logo" src={logo} alt="Logo de la empresa" />
-            <button aria-label="Contacto">Contacto</button>
+            <motion.button
+              aria-label="Contacto"
+              whileHover={{ scale: 1.05, rotate: 1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Contacto
+            </motion.button>
           </section>
-        </header>
+        </motion.header>
 
         <section
           className="Heroe centered-element"
@@ -115,19 +163,36 @@ function App() {
           aria-label="Hero"
         >
           <section className="HeaderBody-section maxwidth">
-            <div className="Heroe-Text">
-              <h1>Domina el Arte del Maquillaje y las Uñas</h1>
-              <p>
+            <motion.div
+              className="Heroe-Text"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <h1>
+                Domina el Arte del <span className="highlight">Maquillaje</span>{" "}
+                y las <span className="highlight">Uñas</span>
+              </h1>
+              <p className="Heroe-Description">
                 Aprende desde cero con expertas, domina las tecnicas en
                 tendencia y asegura tu futuro profesional en el mundo de la
                 belleza.
               </p>
-              <button aria-label="Quiero el temario">Quiero el Temario</button>
-            </div>
-            <img
+              <motion.button
+                aria-label="Quiero el temario"
+                whileHover={{ scale: 1.05, rotate: 1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Quiero el Temario
+              </motion.button>
+            </motion.div>
+            <motion.img
               className="Heroe-Graphic"
               src={graphic}
               alt="Ilustración del curso"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
             />
           </section>
         </section>
@@ -135,8 +200,24 @@ function App() {
 
       <main className="centered-element">
         <section className="material-section maxwidth">
-          <h2 className="titulo">¿Que incluye nuestro programa?</h2>
-          <div className="card">
+          <motion.h2
+            className="titulo"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6 }}
+          >
+            ¿Que incluye nuestro programa?
+          </motion.h2>
+          <motion.div
+            className="card"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            whileHover={{ scale: 1.05, rotate: 1 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <svg
               className="SVG"
               xmlns="http://www.w3.org/2000/svg"
@@ -149,8 +230,16 @@ function App() {
             <p>
               No te preocupes por comprar herramientas, todo esta listo para ti.
             </p>
-          </div>
-          <div className="card">
+          </motion.div>
+          <motion.div
+            className="card"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            whileHover={{ scale: 1.05, rotate: 1 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <svg
               className="SVG"
               xmlns="http://www.w3.org/2000/svg"
@@ -164,8 +253,16 @@ function App() {
               Acomodamos las clases a tu estilo de vida para que no dejes de
               aprender.
             </p>
-          </div>
-          <div className="card">
+          </motion.div>
+          <motion.div
+            className="card"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            whileHover={{ scale: 1.05, rotate: 1 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <svg
               className="SVG"
               xmlns="http://www.w3.org/2000/svg"
@@ -179,35 +276,52 @@ function App() {
               Obten un diploma que avala tus conocimientos para empezar a
               trabajar.
             </p>
-          </div>
+          </motion.div>
         </section>
         <section className="Form-section ">
-          <div className="form-container">
+          <motion.div
+            className="form-container"
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             {/* Componente visual de Barra de Progreso */}
             {!isSubmitted && (
               <div className="progress-bar-bg">
-                <div
+                <motion.div
                   className="progress-bar-fill"
                   style={{ width: `${(step / 4) * 100}%` }}
-                ></div>
+                  animate={{ width: `${(step / 4) * 100}%` }}
+                  transition={{ duration: 0.3 }}
+                ></motion.div>
               </div>
             )}
 
             {isSubmitted ? (
-              <div className="success-message">
+              <motion.div
+                className="success-message"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+              >
                 <h3>¡Registro completado con éxito!</h3>
                 <p>
                   Pronto nos pondremos en contacto contigo a través de{" "}
                   {formData.medioAtencion || "tu medio elegido"}.
                 </p>
-              </div>
+              </motion.div>
             ) : (
               <>
                 <h2 className="form-title">¡Estás a un paso de comenzar!</h2>
 
                 {/* PASO 1: Datos Personales */}
                 {step === 1 && (
-                  <form
+                  <motion.form
+                    key="step1"
+                    variants={formVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
                     onSubmit={(e) => {
                       e.preventDefault();
                       nextStep();
@@ -297,12 +411,17 @@ function App() {
                     <div className="button-group right">
                       <button type="submit">Siguiente</button>
                     </div>
-                  </form>
+                  </motion.form>
                 )}
 
                 {/* PASO 2: Curso y Pagos */}
                 {step === 2 && (
-                  <form
+                  <motion.form
+                    key="step2"
+                    variants={formVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
                     onSubmit={(e) => {
                       e.preventDefault();
                       nextStep();
@@ -319,23 +438,17 @@ function App() {
                         required
                       >
                         <option value="">Selecciona un curso</option>
-                        <option value="Maquillaje">Curso Maquillaje</option>
-                        <option value="Uñas">Curso Uñas</option>
-                        <option value="Pestañas">Curso Pestañas</option>
-                        <option value="Peinado">Curso Peinado</option>
-                        <option value="CejasLashLift">
-                          Curso Cejas & Lash Lift
-                        </option>
-                        <option value="Automaquillaje">
-                          Curso Automaquillaje
-                        </option>
-                        <option value="LashLiftCoreano">
-                          Curso Lash Lift Coreano
-                        </option>
+                        {Object.keys(cursosConfig).map((curso) => (
+                          <option key={curso} value={curso}>
+                            {curso}
+                          </option>
+                        ))}
                       </select>
                     </div>
+
+                    {/* Selector de Módulos (Solo si el curso tiene módulos) */}
                     {formData.curso &&
-                      cursosConfig[formData.curso]?.maxModulos > 1 && (
+                      cursosConfig[formData.curso]?.modulos && (
                         <div className="form-group">
                           <label className="field-label">
                             Selecciona el Módulo
@@ -347,16 +460,17 @@ function App() {
                             required
                           >
                             <option value="">Selecciona un módulo</option>
-                            {Array.from({
-                              length: cursosConfig[formData.curso].maxModulos,
-                            }).map((_, i) => (
-                              <option key={i + 1} value={`Módulo ${i + 1}`}>
-                                Módulo {i + 1}
-                              </option>
-                            ))}
+                            {cursosConfig[formData.curso].modulos!.map(
+                              (mod) => (
+                                <option key={mod.nombre} value={mod.nombre}>
+                                  {mod.nombre} - ${mod.precio} MXN
+                                </option>
+                              ),
+                            )}
                           </select>
                         </div>
                       )}
+
                     <div className="form-group">
                       <label className="field-label">
                         Fecha de Inicio de Curso
@@ -369,6 +483,7 @@ function App() {
                         required
                       />
                     </div>
+
                     <div className="form-group">
                       <input
                         type="number"
@@ -379,19 +494,21 @@ function App() {
                         required
                       />
                     </div>
+
                     <div className="form-group">
                       <input
-                        type="number"
+                        type="text"
                         name="costoTotal"
-                        placeholder="Costo Total del Curso ($)"
-                        value={formData.costoTotal}
+                        placeholder="Costo Total ($)"
+                        value={
+                          formData.costoTotal ? `$${formData.costoTotal}` : ""
+                        }
                         readOnly
                         style={{
                           backgroundColor: "#e5e7eb",
                           cursor: "not-allowed",
                           color: "#6b7280",
                         }}
-                        title="Este valor se calcula automáticamente"
                       />
                     </div>
 
@@ -405,12 +522,17 @@ function App() {
                       </button>
                       <button type="submit">Siguiente</button>
                     </div>
-                  </form>
+                  </motion.form>
                 )}
 
                 {/* PASO 3: Encuesta */}
                 {step === 3 && (
-                  <form
+                  <motion.form
+                    key="step3"
+                    variants={formVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
                     onSubmit={(e) => {
                       e.preventDefault();
                       nextStep();
@@ -504,12 +626,19 @@ function App() {
                       </button>
                       <button type="submit">Siguiente</button>
                     </div>
-                  </form>
+                  </motion.form>
                 )}
 
                 {/* PASO 4: Legal y Envío */}
                 {step === 4 && (
-                  <form onSubmit={handleSubmitFinal}>
+                  <motion.form
+                    key="step4"
+                    variants={formVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    onSubmit={handleSubmitFinal}
+                  >
                     <div className="form-group">
                       <label className="field-label">
                         ¿Eres mayor de 14 años?
@@ -606,15 +735,21 @@ function App() {
                       </button>
                       <button type="submit">Enviar</button>
                     </div>
-                  </form>
+                  </motion.form>
                 )}
               </>
             )}
-          </div>
+          </motion.div>
         </section>
       </main>
 
-      <footer className="centered-element">
+      <motion.footer
+        className="centered-element"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
         <section className="footer maxwidth">
           <img className="Logo" src={logo2} alt="Logo de la empresa" />
           <div className="footer-column">
@@ -624,7 +759,7 @@ function App() {
           </div>
           <section className="social-icons">
             <a
-              href="https://wa.me/528331234567"
+              href="https://wa.me/5216646651531"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -638,7 +773,7 @@ function App() {
               </svg>
             </a>
             <a
-              href="https://instagram.com/caroisla"
+              href="https://www.instagram.com/caroislaschool?igsh=MTF2MHRzY2JmdjU2eQ=="
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -652,7 +787,7 @@ function App() {
               </svg>
             </a>
             <a
-              href="https://facebook.com/caroisla"
+              href="https://www.facebook.com/share/18vwC8FuRN/"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -670,7 +805,7 @@ function App() {
         <div className="copyright">
           © 2026 CARO ISLA SCHOOL. Todos los derechos reservados.
         </div>
-      </footer>
+      </motion.footer>
     </>
   );
 }
